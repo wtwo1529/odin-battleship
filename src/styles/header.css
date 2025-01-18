@@ -1,0 +1,10 @@
+.header {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  margin: 15px 20% 0% 20%;
+}
+.header > p {
+  padding-left: 10%;
+  align-self: flex-end;
+}
