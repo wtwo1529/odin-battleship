@@ -17,8 +17,10 @@ class Gameboard {
   }
   receiveAttack([x, y]) {
     if (this.board[y][x] == 0) {
-      this.board[y][x] = 1;
+      this.misses++;
+      return false;
     }
+    return true;
   }
 }
 export default Gameboard;
