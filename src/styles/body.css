@@ -1,28 +1,35 @@
 .body {
-  margin: min(100px, 5%) 30% 0% 30%;
-  width: min(50%, 350px);
-  height: min(60%, 350px);
+  display: flex;
+  flex-direction: row;
+  column-gap: 100px;
+  max-width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
 }
 .body > p {
   margin-top: min(3.5%, 40px);
   text-align: center;
 }
-.grid {
-  width: 100%;
-  height: 100%;
-  border: 1px black solid;
+.grid-container {
+  width: min(50%, 350px);
+  height: min(60%, 350px);
   display: flex;
   flex-direction: column;
+}
+.grid {
+  width: calc(34.5px * 10);
+  height: calc(34.5px * 10);
+  border: 1px black solid;
 }
 .grid-row {
   display: flex;
   flex-direction: row;
-  width: 100%;
-  height: 100%;
+  width: calc(34.5px * 10);
+  height: 34.5px;
 }
 .grid-square {
   border: 0.25px black solid;
-  width: 100%;
-  height: 100%;
+  width: 34.5px;
+  height: 34.5px;
   caret-color: transparent;
 }
