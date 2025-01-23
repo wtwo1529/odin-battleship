@@ -47,7 +47,7 @@ class DisplayController {
     coordinate.appendChild(symbol);
     if (this.gameboard.board[i][j] == -1) {
       symbol.innerText = "O";
-    } else if (this.gameboard.board[i][j] == 2) {
+    } else if (this.gameboard.board[i][j] == 1) {
       symbol.innerText = "X";
     }
     return coordinate;

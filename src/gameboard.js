@@ -7,84 +7,59 @@ class Gameboard {
     this.misses = 0;
     this.sunkenShips = 0;
     this.ships = [];
+    this.takenpositions = {};
     this.generateShips();
   }
   generateShips() {
+    let reservedGrid = Array(10)
+      .fill()
+      .map(() => Array(10).fill(0));
     let ships = [4, 3, 3, 2, 2, 2, 1, 1, 1, 1];
     console.log("hi");
     for (let i = 0; i < ships.length; i++) {
-      let VALID_COORDINATES = false;
-      let start_x, start_y;
+      let placed = false;
       let SHIP_LENGTH = ships[i];
-      outer: while (!VALID_COORDINATES) {
-        start_x = getRandomInt(0, 9);
-        start_y = getRandomInt(0, 9);
-        let horizontal = [start_x - SHIP_LENGTH, start_x + SHIP_LENGTH];
-        let vertical = [start_y - SHIP_LENGTH, start_y + SHIP_LENGTH];
-        horizontal = horizontal.filter((n) => n > 0 && n < 10);
-        vertical = vertical.filter((n) => n > 0 && n < 10);
-        if (horizontal) {
-          for (let i = 0; i < horizontal.length; i++) {
-            let tmp = [
-              start_x - 1,
-              start_x + 1,
-              start_x - SHIP_LENGTH - 1,
-              start_x - SHIP_LENGTH + 1,
-              start_x + SHIP_LENGTH - 1,
-              start_x + SHIP_LENGTH + 1,
-            ];
-            let tmp2 = [start_y - 1, start_y + 1];
-            tmp = tmp.filter((n) => n > 0 && n < 10);
-            tmp2 = tmp2.filter((n) => n > 0 && n < 10);
+      while (!placed) {
+        const isVertical = Math.random() < 0.5;
+        const start_x = getRandomInt(0, 9);
+        const start_y = getRandomInt(0, 9);
+        const end_x = isVertical ? start_x : start_x + SHIP_LENGTH - 1;
+        const end_y = isVertical ? start_y + SHIP_LENGTH - 1 : start_y;
+        if (end_x >= 10 || end_y >= 10) continue;
 
-            for (let k = 0; k < tmp.length; k++) {
-              if (this.board[start_y][tmp[k]]) continue outer;
-            }
-            for (let k = 0; k < tmp2.length; k++) {
-              if (this.board[tmp2[k]][start_x]) continue outer;
-            }
-            if (horizontal[i] < start_x) {
-              for (let j = horizontal[i]; j <= start_x; j++) {
-                this.board[start_y][j] = 1;
-              }
-            } else {
-              for (let j = start_x; j <= horizontal[i]; j++) {
-                this.board[start_y][j] = 1;
-              }
-            }
-            VALID_COORDINATES = true;
-          }
-        } else if (vertical) {
-          let tmp = [
-            start_y - 1,
-            start_y + 1,
-            start_y - SHIP_LENGTH - 1,
-            start_y - SHIP_LENGTH + 1,
-            start_y + SHIP_LENGTH - 1,
-            start_y + SHIP_LENGTH + 1,
-          ];
-          let tmp2 = [start_x - 1, start_x + 1];
-          tmp = tmp.filter((n) => n > 0 && n < 10);
-          tmp2 = tmp2.filter((n) => n > 0 && n < 10);
-          for (let k = 0; k < tmp.length; k++) {
-            if (this.board[tmp[k]][start_x]) continue outer;
-          }
-          for (let k = 0; k < tmp2.length; k++) {
-            if (this.board[start_y][tmp2[k]]) continue outer;
-          }
-          for (let i = 0; i < vertical.length; i++) {
-            if (vertical[i] < start_y) {
-              for (let j = vertical[i]; i <= start_y; j++) {
-                this.board[j][start_x] = 1;
-              }
-            } else {
-              for (let j = start_y; j <= vertical[i]; j++) {
-                this.board[j][start_x] = 1;
-              }
-            }
-            VALID_COORDINATES = true;
+        let overlap = false;
+        for (let j = 0; j < SHIP_LENGTH; j++) {
+          const x = isVertical ? start_x : start_x + j;
+          const y = isVertical ? start_y + j : start_y;
+          if (reservedGrid[y][x]) {
+            overlap = true;
+            break;
           }
         }
+        if (overlap) continue;
+        for (let j = 0; j < SHIP_LENGTH; j++) {
+          const x = isVertical ? start_x : start_x + j;
+          const y = isVertical ? start_y + j : start_y;
+          for (let dy = -1; dy <= 1; dy++) {
+            for (let dx = -1; dx <= 1; dx++) {
+              let adjx = x + dx;
+              let adjy = y + dy;
+              if (adjx >= 0 && adjx <= 9 && adjy >= 0 && adjy <= 9) {
+                reservedGrid[adjy][adjx] = 1;
+              }
+            }
+          }
+          this.board[y][x] = 1;
+        }
+        this.ships.push([
+          start_x,
+          start_y,
+          end_x,
+          end_y,
+          SHIP_LENGTH,
+          isVertical,
+        ]);
+        placed = true;
       }
     }
     console.log(this.ships);
