@@ -4,7 +4,7 @@ class DisplayController {
     this.player = player;
     this.gameboard = player.gameboard;
     this.coordinates = [];
-
+    this.clicked = {};
     this.nextRound = nextRound;
 
     this.coordinateClickEvent = this.coordinateClickEvent.bind(this);
@@ -46,22 +46,27 @@ class DisplayController {
     symbol.classList.add("board-symbol");
     coordinate.appendChild(symbol);
     if (this.gameboard.board[i][j] == -1) {
-      symbol.innerText = "X";
-    } else if (this.gameboard.board[i][j] == 1) {
       symbol.innerText = "O";
+    } else if (this.gameboard.board[i][j] == 2) {
+      symbol.innerText = "X";
     }
     return coordinate;
   }
   coordinateClickEvent(e) {
     let x = e.currentTarget.dataset.x;
     let y = e.currentTarget.dataset.y;
+    if (this.clicked[[x, y]]) return;
+
     if (this.gameboard.receiveAttack([x, y])) {
       this.gameboard.board[y][x] = 1;
     }
     this.gameboard.board[y][x] = -1;
-
+    const coordinate_index = this.coordinates.indexOf(e.currentTarget);
+    this.coordinates = this.coordinates.splice(coordinate_index, 1);
     this.renderBoard();
+
     this.nextRound();
+    this.clicked[[x, y]] = 1;
   }
 }
 
