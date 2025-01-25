@@ -76,13 +76,15 @@ class Gameboard {
     return board;
   }
   receiveAttack([x, y]) {
-    if (this.board[y][x] == 0) {
-      this.misses++;
-      return false;
-    } else if (this.board[y][x] == 1) {
+    if (this.board[y][x]) {
       this.board[y][x] = 2;
+      console.log("hit");
       return true;
     }
+    this.misses++;
+    this.board[y][x] = -1;
+    console.log("miss");
+    return false;
   }
 }
 export default Gameboard;

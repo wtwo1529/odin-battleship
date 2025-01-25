@@ -47,20 +47,21 @@ class DisplayController {
     coordinate.appendChild(symbol);
     if (this.gameboard.board[i][j] == -1) {
       symbol.innerText = "O";
-    } else if (this.gameboard.board[i][j] == 1) {
+    } else if (this.gameboard.board[i][j] == 2) {
       symbol.innerText = "X";
     }
     return coordinate;
   }
   coordinateClickEvent(e) {
-    let x = e.currentTarget.dataset.x;
-    let y = e.currentTarget.dataset.y;
+    let x = parseInt(e.currentTarget.dataset.x);
+    let y = parseInt(e.currentTarget.dataset.y);
     if (this.clicked[[x, y]]) return;
 
     if (this.gameboard.receiveAttack([x, y])) {
-      this.gameboard.board[y][x] = 1;
+      this.gameboard.board[y][x] = 2;
+    } else {
+      this.gameboard.board[y][x] = -1;
     }
-    this.gameboard.board[y][x] = -1;
     const coordinate_index = this.coordinates.indexOf(e.currentTarget);
     this.coordinates = this.coordinates.splice(coordinate_index, 1);
     this.renderBoard();
