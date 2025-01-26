@@ -1,14 +1,15 @@
 class Ship {
-  constructor(length, health) {
+  constructor(length) {
     this.length = length;
-    this.health = health;
+    this.noOfHits = 0;
     this.sunk = false;
   }
   hit() {
-    this.health--;
+    this.noOfHits++;
   }
   isSunk() {
-    if (this.health == 0) this.sunk = true;
+    if (this.noOfHits == this.length) this.sunk = true;
+    return this.sunk;
   }
 }
 

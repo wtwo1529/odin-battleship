@@ -24,19 +24,36 @@ class GameController {
   start() {
     this.displayControllers[0].enableClickEvents();
   }
+  checkIfWinner() {
+    if (len(this.player.gameboard.sunkenShips) == 10) {
+      return this.player;
+    } else if (len(this.computer.gameboard.sunkenShips) == 10) {
+      return this.computer;
+    }
+    return null;
+  }
   nextRound() {
-    if (this.winner) {
-      return;
+    let winner = this.checkIfWinner();
+    if (winner) {
+      this.displayControllers[this.round % 2].disableClickEvents();
+      this.displayControllers[++this.round % 2].disableClickEvents();
+      return winner;
     }
     this.displayControllers[this.round % 2].disableClickEvents();
     this.displayControllers[++this.round % 2].enableClickEvents();
     console.log(this.round);
+    return null;
   }
   loadDisplayControllers(divElements, players) {
     let tmp = [];
     for (let i = 0; i < divElements.length; i++) {
       tmp.push(
-        new DisplayController(divElements[i], players[i], this.nextRound)
+        new DisplayController(
+          divElements[i],
+          players[i],
+          this.nextRound,
+          this.checkIfWinner
+        )
       );
     }
     return tmp;

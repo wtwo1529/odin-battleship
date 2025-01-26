@@ -1,11 +1,12 @@
 import getRandomInt from "./randomInteger";
+import Ship from "./ship";
 
 class Gameboard {
   constructor(computer = false) {
     this.computer = computer;
     this.board = this.generateBoard();
     this.misses = 0;
-    this.sunkenShips = 0;
+    this.sunkenShips = [];
     this.ships = [];
     this.takenpositions = {};
     this.generateShips();
@@ -18,7 +19,8 @@ class Gameboard {
     console.log("hi");
     for (let i = 0; i < ships.length; i++) {
       let placed = false;
-      let SHIP_LENGTH = ships[i];
+      let ship = new Ship(ships[i]);
+      let SHIP_LENGTH = ship.length;
       while (!placed) {
         const isVertical = Math.random() < 0.5;
         const start_x = getRandomInt(0, 9);
@@ -49,7 +51,7 @@ class Gameboard {
               }
             }
           }
-          this.board[y][x] = 1;
+          this.board[y][x] = ship;
         }
         this.ships.push([
           start_x,
@@ -76,13 +78,18 @@ class Gameboard {
     return board;
   }
   receiveAttack([x, y]) {
-    if (this.board[y][x]) {
-      this.board[y][x] = 2;
+    let coordinate = this.board[y][x];
+    if (coordinate instanceof Ship) {
+      coordinate.hit();
+      console.log(coordinate.noOfHits);
+      if (coordinate.isSunk()) {
+        this.sunkenShips.push(coordinate);
+        console.log(`Sunk: ${coordinate.sunk}`);
+      }
       console.log("hit");
       return true;
     }
     this.misses++;
-    this.board[y][x] = -1;
     console.log("miss");
     return false;
   }

@@ -47,7 +47,7 @@ class DisplayController {
     coordinate.appendChild(symbol);
     if (this.gameboard.board[i][j] == -1) {
       symbol.innerText = "O";
-    } else if (this.gameboard.board[i][j] == 2) {
+    } else if (this.gameboard.board[i][j] == 1) {
       symbol.innerText = "X";
     }
     return coordinate;
@@ -58,16 +58,16 @@ class DisplayController {
     if (this.clicked[[x, y]]) return;
 
     if (this.gameboard.receiveAttack([x, y])) {
-      this.gameboard.board[y][x] = 2;
+      this.gameboard.board[y][x] = 1;
     } else {
       this.gameboard.board[y][x] = -1;
     }
     const coordinate_index = this.coordinates.indexOf(e.currentTarget);
     this.coordinates = this.coordinates.splice(coordinate_index, 1);
     this.renderBoard();
-
     this.nextRound();
     this.clicked[[x, y]] = 1;
+    this.player.moves++;
   }
 }
 
