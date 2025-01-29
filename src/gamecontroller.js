@@ -1,14 +1,23 @@
 import DisplayController from "./displaycontroller";
 
 class GameController {
-  constructor(divElements, players) {
+  constructor(divElements, playBtn, randomBtn, players) {
+    this.start = this.start.bind(this);
     this.nextRound = this.nextRound.bind(this);
-    this.displayControllers = this.loadDisplayControllers(divElements, players);
+    this.checkIfWinner = this.checkIfWinner.bind(this);
+
+    this.displayControllers = this.loadDisplayControllers(
+      divElements,
+      playBtn,
+      randomBtn,
+      players
+    );
+
     this.player = this.displayControllers[0];
     this.computer = this.displayControllers[1];
     this.round = 0;
     this.winner = null;
-    this.start();
+    this.started = false;
   }
   search() {
     let attacked = [];
@@ -22,35 +31,50 @@ class GameController {
     prev_y = rand_y;
   }
   start() {
-    this.displayControllers[0].enableClickEvents();
+    console.log(this.player.gameboard);
+    console.log(this.computer.gameboard);
+    if (
+      !(
+        this.player.gameboard.shipsPlaced() &&
+        this.computer.gameboard.shipsPlaced()
+      )
+    ) {
+      return false;
+    }
+    this.started = this.player.startGame();
+    this.computer.removePlayContainer();
+    this.player.enableClickEvents();
   }
   checkIfWinner() {
-    if (len(this.player.gameboard.sunkenShips) == 10) {
-      return this.player;
-    } else if (len(this.computer.gameboard.sunkenShips) == 10) {
-      return this.computer;
+    if (this.player.gameboard.shipsSunk()) {
+      this.winner = this.player;
+    } else if (this.computer.gameboard.shipsSunk()) {
+      this.winner = this.computer;
     }
-    return null;
+    return this.winner;
   }
   nextRound() {
     let winner = this.checkIfWinner();
     if (winner) {
       this.displayControllers[this.round % 2].disableClickEvents();
       this.displayControllers[++this.round % 2].disableClickEvents();
-      return winner;
+    } else {
+      this.displayControllers[this.round % 2].disableClickEvents();
+      this.displayControllers[++this.round % 2].enableClickEvents();
     }
-    this.displayControllers[this.round % 2].disableClickEvents();
-    this.displayControllers[++this.round % 2].enableClickEvents();
     console.log(this.round);
-    return null;
+    return winner;
   }
-  loadDisplayControllers(divElements, players) {
+  loadDisplayControllers(divElements, playBtn, randomBtn, players) {
     let tmp = [];
     for (let i = 0; i < divElements.length; i++) {
       tmp.push(
         new DisplayController(
           divElements[i],
+          playBtn,
+          randomBtn,
           players[i],
+          this.start,
           this.nextRound,
           this.checkIfWinner
         )

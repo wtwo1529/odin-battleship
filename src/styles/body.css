@@ -15,6 +15,7 @@
   height: min(60%, 350px);
   display: flex;
   flex-direction: column;
+  row-gap: 10px;
 }
 .grid {
   width: calc(34.5px * 10);
@@ -32,4 +33,7 @@
   width: 34.5px;
   height: 34.5px;
   caret-color: transparent;
+}
+.grid-subtitle {
+  font-size: 20px;
 }

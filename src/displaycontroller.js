@@ -1,17 +1,35 @@
+import Ship from "./ship";
+
 class DisplayController {
-  constructor(divElement, player, nextRound) {
+  constructor(divElement, playBtn, randomBtn, player, startGame, nextRound) {
     this.divElement = divElement;
+    this.playBtn = playBtn;
     this.player = player;
     this.gameboard = player.gameboard;
     this.coordinates = [];
     this.clicked = {};
     this.nextRound = nextRound;
+    this.started = false;
+
+    this.bindStartBtn(playBtn, startGame);
+    this.bindRandomBtn(randomBtn, this.player.gameboard.generateShips);
 
     this.coordinateClickEvent = this.coordinateClickEvent.bind(this);
     this.disableClickEvents = this.disableClickEvents.bind(this);
     this.enableClickEvents = this.enableClickEvents.bind(this);
 
     this.renderBoard();
+  }
+  startGame() {
+    if (!this.started) {
+      this.started = true;
+      return true;
+    }
+  }
+  removePlayContainer() {
+    const playContainer = document.querySelector(".play-btn-container");
+    playContainer.style.opacity = 0;
+    playContainer.style.pointerEvents = "none";
   }
   disableClickEvents() {
     this.coordinates.forEach((coordinate) => {
@@ -22,6 +40,17 @@ class DisplayController {
     this.coordinates.forEach((coordinate) => {
       coordinate.addEventListener("click", this.coordinateClickEvent);
     });
+  }
+  bindRandomBtn(randomBtn, cb) {
+    randomBtn.addEventListener("click", (e) => {
+      if (!this.started) {
+        cb();
+        this.renderBoard();
+      }
+    });
+  }
+  bindStartBtn(startBtn, cb) {
+    startBtn.addEventListener("click", cb);
   }
   renderBoard() {
     this.divElement.innerHTML = "";
@@ -49,6 +78,12 @@ class DisplayController {
       symbol.innerText = "O";
     } else if (this.gameboard.board[i][j] == 1) {
       symbol.innerText = "X";
+    } else if (
+      !this.started &&
+      !this.player.computer &&
+      this.gameboard.board[i][j] instanceof Ship
+    ) {
+      symbol.innerText = "S";
     }
     return coordinate;
   }

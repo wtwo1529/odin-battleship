@@ -10,8 +10,20 @@ class Gameboard {
     this.ships = [];
     this.takenpositions = {};
     this.generateShips();
+
+    this.generateShips = this.generateShips.bind(this);
+  }
+  shipsPlaced() {
+    return this.ships.length == 10 ? true : false;
+  }
+  shipsSunk() {
+    return this.sunkenShips.length == 10 ? true : false;
   }
   generateShips() {
+    this.board = Array(10)
+      .fill()
+      .map(() => Array(10).fill(0));
+    this.ships = [];
     let reservedGrid = Array(10)
       .fill()
       .map(() => Array(10).fill(0));

@@ -1,0 +1,21 @@
+.play-btn-container {
+  position: absolute;
+  border: 1px green solid;
+  min-width: calc(34.5px * 10);
+  min-height: calc(34.5px * 10);
+  background-color: gray;
+  opacity: 0.85;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.play-btn {
+  padding: 12.5px 15px;
+  border-radius: 8px;
+  font-size: 20px;
+  background-color: rgba(2, 192, 2, 0.6);
+  border: 1px black solid;
+}
+.play-btn:active {
+  opacity: 0.6;
+}
