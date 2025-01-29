@@ -42,10 +42,12 @@ class DisplayController {
     });
   }
   bindRandomBtn(randomBtn, cb) {
+    if (this.player.computer) return false;
     randomBtn.addEventListener("click", (e) => {
       if (!this.started) {
         cb();
         this.renderBoard();
+        console.log(this.player.gameboard);
       }
     });
   }

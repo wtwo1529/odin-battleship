@@ -20,15 +20,10 @@ class Gameboard {
     return this.sunkenShips.length == 10 ? true : false;
   }
   generateShips() {
-    this.board = Array(10)
-      .fill()
-      .map(() => Array(10).fill(0));
+    this.board = this.generateBoard();
     this.ships = [];
-    let reservedGrid = Array(10)
-      .fill()
-      .map(() => Array(10).fill(0));
+    let reservedGrid = this.generateBoard();
     let ships = [4, 3, 3, 2, 2, 2, 1, 1, 1, 1];
-    console.log("hi");
     for (let i = 0; i < ships.length; i++) {
       let placed = false;
       let ship = new Ship(ships[i]);
@@ -76,18 +71,11 @@ class Gameboard {
         placed = true;
       }
     }
-    console.log(this.ships);
   }
   generateBoard() {
-    const board = [];
-    for (let i = 0; i < 10; i++) {
-      let row = [];
-      for (let j = 0; j < 10; j++) {
-        row.push(0);
-      }
-      board.push(row);
-    }
-    return board;
+    return Array(10)
+      .fill()
+      .map(() => Array(10).fill(0));
   }
   receiveAttack([x, y]) {
     let coordinate = this.board[y][x];

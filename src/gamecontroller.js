@@ -16,6 +16,7 @@ class GameController {
     this.player = this.displayControllers[0];
     this.computer = this.displayControllers[1];
     this.round = 0;
+    this.turn = undefined;
     this.winner = null;
     this.started = false;
   }
@@ -42,6 +43,8 @@ class GameController {
       return false;
     }
     this.started = this.player.startGame();
+    this.turn = "player";
+
     this.computer.removePlayContainer();
     this.player.enableClickEvents();
   }
@@ -55,12 +58,20 @@ class GameController {
   }
   nextRound() {
     let winner = this.checkIfWinner();
+
     if (winner) {
       this.displayControllers[this.round % 2].disableClickEvents();
       this.displayControllers[++this.round % 2].disableClickEvents();
     } else {
-      this.displayControllers[this.round % 2].disableClickEvents();
-      this.displayControllers[++this.round % 2].enableClickEvents();
+      if (this.turn == "player") {
+        this.player.disableClickEvents();
+        this.turn == "computer";
+      } else {
+        this.computer;
+
+        this.player.enableClickEvents();
+        this.turn == "player";
+      }
     }
     console.log(this.round);
     return winner;
