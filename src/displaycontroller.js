@@ -81,7 +81,6 @@ class DisplayController {
     } else if (this.gameboard.board[i][j] == 1) {
       symbol.innerText = "X";
     } else if (
-      !this.started &&
       !this.player.computer &&
       this.gameboard.board[i][j] instanceof Ship
     ) {
@@ -93,11 +92,9 @@ class DisplayController {
     let x = parseInt(e.currentTarget.dataset.x);
     let y = parseInt(e.currentTarget.dataset.y);
     if (this.clicked[[x, y]]) return;
-
-    if (this.gameboard.receiveAttack([x, y])) {
-      this.gameboard.board[y][x] = 1;
-    } else {
-      this.gameboard.board[y][x] = -1;
+    let status = this.gameboard.receiveAttack([x, y]);
+    if (status) {
+      this.gameboard.board[y][x] = status;
     }
     const coordinate_index = this.coordinates.indexOf(e.currentTarget);
     this.coordinates = this.coordinates.splice(coordinate_index, 1);

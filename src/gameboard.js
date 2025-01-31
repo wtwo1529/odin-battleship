@@ -8,10 +8,24 @@ class Gameboard {
     this.misses = 0;
     this.sunkenShips = [];
     this.ships = [];
-    this.takenpositions = {};
     this.generateShips();
 
     this.generateShips = this.generateShips.bind(this);
+    this.receiveAttack = this.receiveAttack.bind(this);
+    this.play = this.play.bind(this);
+  }
+  play() {
+    let invalidCoordinate = true;
+    while (invalidCoordinate) {
+      let rand_x = getRandomInt(0, 9);
+      let rand_y = getRandomInt(0, 9);
+      let status = this.receiveAttack([rand_x, rand_y]);
+      if (status) {
+        this.board[rand_y][rand_x] = status;
+        invalidCoordinate = false;
+      }
+    }
+    return true;
   }
   shipsPlaced() {
     return this.ships.length == 10 ? true : false;
@@ -79,7 +93,8 @@ class Gameboard {
   }
   receiveAttack([x, y]) {
     let coordinate = this.board[y][x];
-    if (coordinate instanceof Ship) {
+    if (coordinate == -1 || coordinate == 1) return 0;
+    else if (coordinate instanceof Ship) {
       coordinate.hit();
       console.log(coordinate.noOfHits);
       if (coordinate.isSunk()) {
@@ -87,11 +102,12 @@ class Gameboard {
         console.log(`Sunk: ${coordinate.sunk}`);
       }
       console.log("hit");
-      return true;
+      return 1;
+    } else {
+      this.misses++;
+      console.log("miss");
+      return -1;
     }
-    this.misses++;
-    console.log("miss");
-    return false;
   }
 }
 export default Gameboard;
