@@ -26,6 +26,11 @@ class DisplayController {
       return true;
     }
   }
+  revealPlayContainer() {
+    const playContainer = document.querySelector(".play-btn-container");
+    playContainer.style.opacity = 0.85;
+    playContainer.style.pointerEvents = "auto";
+  }
   removePlayContainer() {
     const playContainer = document.querySelector(".play-btn-container");
     playContainer.style.opacity = 0;

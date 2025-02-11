@@ -1,0 +1,31 @@
+.game-result-modal[open] {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  top: 200px;
+  margin-bottom: auto;
+  margin-left: auto;
+  margin-right: auto;
+  overflow: hidden;
+  min-width: 175px;
+  min-height: 175px;
+  border-radius: 12px;
+  padding: 20px 25px;
+}
+.game-result-modal h1 {
+  text-align: center;
+}
+.game-result-modal button {
+  margin-top: auto;
+  border: 1px black solid;
+  border-radius: 6px;
+  padding: 10px 12.5px;
+  margin-bottom: 10px;
+  background-color: none;
+  cursor: pointer;
+}
+.game-result-modal button:active {
+  background-color: rgba(0, 0, 0, 0.175);
+}
